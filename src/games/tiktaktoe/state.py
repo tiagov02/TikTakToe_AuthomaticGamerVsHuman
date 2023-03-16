@@ -1,31 +1,27 @@
 from typing import Optional
 
-from games.connect4.action import Connect4Action
-from games.connect4.result import Connect4Result
+from games.tiktaktoe.action import TikTakToeAction
+from games.tiktaktoe.result import TikTakToeResult
 from games.state import State
 
 
-class Connect4State(State):
+class TikTakToeState(State):
     EMPTY_CELL = -1
 
-    def __init__(self, num_rows: int = 6, num_cols: int = 7):
+    def __init__(self, dimension: int = 6):
         super().__init__()
 
-        if num_rows < 4:
+        if dimension < 4:
             raise Exception("the number of rows must be 4 or over")
-        if num_cols < 4:
-            raise Exception("the number of cols must be 4 or over")
-
         """
         the dimensions of the board
         """
-        self.__num_rows = num_rows
-        self.__num_cols = num_cols
+        self.__dimension = dimension
 
         """
         the grid
         """
-        self.__grid = [[Connect4State.EMPTY_CELL for _i in range(self.__num_cols)] for _j in range(self.__num_rows)]
+        self.__grid = [[TikTakToeState.EMPTY_CELL for _i in range(self.__dimension)] for _j in range(self.__dimension)]
 
         """
         counts the number of turns in the current game
@@ -43,9 +39,9 @@ class Connect4State(State):
         self.__has_winner = False
 
     def __check_winner(self, player):
-        # check for 4 across
-        for row in range(0, self.__num_rows):
-            for col in range(0, self.__num_cols - 3):
+        # check for 4 across --> line
+        for row in range(0, self.__dimension):
+            for col in range(0, self.__dimension - 3):
                 if self.__grid[row][col] == player and \
                         self.__grid[row][col + 1] == player and \
                         self.__grid[row][col + 2] == player and \
@@ -53,8 +49,8 @@ class Connect4State(State):
                     return True
 
         # check for 4 up and down
-        for row in range(0, self.__num_rows - 3):
-            for col in range(0, self.__num_cols):
+        for row in range(0, self.__dimension - 3):
+            for col in range(0, self.__dimension):
                 if self.__grid[row][col] == player and \
                         self.__grid[row + 1][col] == player and \
                         self.__grid[row + 2][col] == player and \
@@ -62,8 +58,8 @@ class Connect4State(State):
                     return True
 
         # check upward diagonal
-        for row in range(3, self.__num_rows):
-            for col in range(0, self.__num_cols - 3):
+        for row in range(3, self.__dimension):
+            for col in range(0, self.__dimension - 3):
                 if self.__grid[row][col] == player and \
                         self.__grid[row - 1][col + 1] == player and \
                         self.__grid[row - 2][col + 2] == player and \
@@ -71,8 +67,8 @@ class Connect4State(State):
                     return True
 
         # check downward diagonal
-        for row in range(0, self.__num_rows - 3):
-            for col in range(0, self.__num_cols - 3):
+        for row in range(0, self.__dimension - 3):
+            for col in range(0, self.__dimension - 3):
                 if self.__grid[row][col] == player and \
                         self.__grid[row + 1][col + 1] == player and \
                         self.__grid[row + 2][col + 2] == player and \
@@ -87,27 +83,27 @@ class Connect4State(State):
     def get_num_players(self):
         return 2
 
-    def validate_action(self, action: Connect4Action) -> bool:
-        col = action.get_col()
+    def validate_action(self, action: TikTakToeAction) -> bool:
+        x = action.get_x()
+        y = action.get_y()
 
         # valid column
-        if col < 0 or col >= self.__num_cols:
+        if x < 0 or x >= self.__dimension or y < 0 or y >= self.__dimension:
             return False
 
         # full column
-        if self.__grid[0][col] != Connect4State.EMPTY_CELL:
+        if self.__grid[x][y] != TikTakToeState.EMPTY_CELL:
             return False
 
         return True
 
-    def update(self, action: Connect4Action):
-        col = action.get_col()
+    def update(self, action: TikTakToeAction):
+        x = action.get_x()
+        y = action.get_y()
 
         # drop the checker
-        for row in range(self.__num_rows - 1, -1, -1):
-            if self.__grid[row][col] < 0:
-                self.__grid[row][col] = self.__acting_player
-                break
+        if self.__grid[x][y] == self.EMPTY_CELL:
+            self.__grid[x][y] = self.__acting_player
 
         # determine if there is a winner
         self.__has_winner = self.__check_winner(self.__acting_player)
@@ -121,7 +117,7 @@ class Connect4State(State):
         print({
                   0: 'R',
                   1: 'B',
-                  Connect4State.EMPTY_CELL: ' '
+                  TikTakToeState.EMPTY_CELL: ' '
               }[self.__grid[row][col]], end="")
 
     def __display_numbers(self):
@@ -161,7 +157,7 @@ class Connect4State(State):
         return self.__acting_player
 
     def clone(self):
-        cloned_state = Connect4State(self.__num_rows, self.__num_cols)
+        cloned_state = TikTakToeState(self.__num_rows, self.__num_cols)
         cloned_state.__turns_count = self.__turns_count
         cloned_state.__acting_player = self.__acting_player
         cloned_state.__has_winner = self.__has_winner
@@ -170,11 +166,11 @@ class Connect4State(State):
                 cloned_state.__grid[row][col] = self.__grid[row][col]
         return cloned_state
 
-    def get_result(self, pos) -> Optional[Connect4Result]:
+    def get_result(self, pos) -> Optional[TikTakToeResult]:
         if self.__has_winner:
-            return Connect4Result.LOOSE if pos == self.__acting_player else Connect4Result.WIN
+            return TikTakToeResult.LOOSE if pos == self.__acting_player else TikTakToeResult.WIN
         if self.__is_full():
-            return Connect4Result.DRAW
+            return TikTakToeResult.DRAW
         return None
 
     def get_num_rows(self):
@@ -190,7 +186,7 @@ class Connect4State(State):
         return list(filter(
             lambda action: self.validate_action(action),
             map(
-                lambda pos: Connect4Action(pos),
+                lambda pos: TikTakToeAction(pos),
                 range(0, self.get_num_cols()))
         ))
 

@@ -1,11 +1,15 @@
-class Connect4Action:
+class TikTakToeAction:
     """
     a connect 4 action is simple - it only takes the value of the column to play
     """
-    __col: int
+    __x: int
+    __y: int
 
-    def __init__(self, col: int):
-        self.__col = col
+    def __init__(self, x: int,y:int):
+        self.__x = x
+        self.__y = y
 
-    def get_col(self):
-        return self.__col
+    def get_x(self):
+        return self.__x
+    def get_y(self):
+        return self.__y
