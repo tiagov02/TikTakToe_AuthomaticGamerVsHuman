@@ -5,16 +5,15 @@ from games.game_simulator import GameSimulator
 
 class TikTakToeSimulator(GameSimulator):
 
-    def __init__(self, player1: TikTakToePlayer, player2: TikTakToePlayer, num_rows: int = 6, num_cols: int = 7):
+    def __init__(self, player1: TikTakToePlayer, player2: TikTakToePlayer,dimension):
         super(TikTakToeSimulator, self).__init__([player1, player2])
         """
         the number of rows and cols from the tiktaktoe grid
         """
-        self.__num_rows = num_rows
-        self.__num_cols = num_cols
+        self.__dimension = dimension
 
     def init_game(self):
-        return TikTakToeState(self.__num_rows, self.__num_cols)
+        return TikTakToeState(self.__dimension)
 
     def before_end_game(self, state: TikTakToeState):
         # ignored for this simulator

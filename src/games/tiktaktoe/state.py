@@ -115,20 +115,20 @@ class TikTakToeState(State):
 
     def __display_cell(self, row, col):
         print({
-                  0: 'R',
-                  1: 'B',
+                  0: 'O',
+                  1: 'X',
                   TikTakToeState.EMPTY_CELL: ' '
               }[self.__grid[row][col]], end="")
 
     def __display_numbers(self):
-        for col in range(0, self.__num_cols):
+        for col in range(0, self.__dimension):
             if col < 10:
                 print(' ', end="")
             print(col, end="")
         print("")
 
     def __display_separator(self):
-        for col in range(0, self.__num_cols):
+        for col in range(0, self.__dimension):
             print("--", end="")
         print("-")
 
@@ -136,9 +136,9 @@ class TikTakToeState(State):
         self.__display_numbers()
         self.__display_separator()
 
-        for row in range(0, self.__num_rows):
+        for row in range(0, self.__dimension):
             print('|', end="")
-            for col in range(0, self.__num_cols):
+            for col in range(0, self.__dimension):
                 self.__display_cell(row, col)
                 print('|', end="")
             print("")
@@ -148,7 +148,7 @@ class TikTakToeState(State):
         print("")
 
     def __is_full(self):
-        return self.__turns_count > (self.__num_cols * self.__num_rows)
+        return self.__turns_count > (self.__dimension * self.__dimension)
 
     def is_finished(self) -> bool:
         return self.__has_winner or self.__is_full()
@@ -157,12 +157,12 @@ class TikTakToeState(State):
         return self.__acting_player
 
     def clone(self):
-        cloned_state = TikTakToeState(self.__num_rows, self.__num_cols)
+        cloned_state = TikTakToeState(self.__dimension)
         cloned_state.__turns_count = self.__turns_count
         cloned_state.__acting_player = self.__acting_player
         cloned_state.__has_winner = self.__has_winner
-        for row in range(0, self.__num_rows):
-            for col in range(0, self.__num_cols):
+        for row in range(0, self.__dimension):
+            for col in range(0, self.__dimension):
                 cloned_state.__grid[row][col] = self.__grid[row][col]
         return cloned_state
 
@@ -173,11 +173,8 @@ class TikTakToeState(State):
             return TikTakToeResult.DRAW
         return None
 
-    def get_num_rows(self):
-        return self.__num_rows
-
-    def get_num_cols(self):
-        return self.__num_cols
+    def get_dimension(self):
+        return self.__dimension
 
     def before_results(self):
         pass
@@ -186,8 +183,8 @@ class TikTakToeState(State):
         return list(filter(
             lambda action: self.validate_action(action),
             map(
-                lambda pos: TikTakToeAction(pos),
-                range(0, self.get_num_cols()))
+                lambda x,y: TikTakToeAction(x,y),
+                range(0, self.get_dimension()))
         ))
 
     def sim_play(self, action):
