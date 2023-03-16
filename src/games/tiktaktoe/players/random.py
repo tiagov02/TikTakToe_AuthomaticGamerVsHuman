@@ -12,7 +12,7 @@ class RandomTikTakToePlayer(TikTakToePlayer):
         super().__init__(name)
 
     def get_action(self, state: TikTakToeState):
-        return TikTakToeAction(randint(0, state.get_num_cols()))
+        return TikTakToeAction(randint(0, state.get_dimension()),randint(0,state.get_dimension()))
 
     def event_action(self, pos: int, action, new_state: State):
         # ignore
