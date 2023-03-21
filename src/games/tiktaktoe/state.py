@@ -7,6 +7,7 @@ from games.state import State
 
 class TikTakToeState(State):
     EMPTY_CELL = -1
+    #teste
 
     def __init__(self, dimension: int = 6):
         super().__init__()
