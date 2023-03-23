@@ -9,6 +9,7 @@ from games.poker.players.always_pass import AlwaysPassKuhnPokerPlayer
 from games.poker.players.cfr import CFRKuhnPokerPlayer
 from games.poker.players.random import RandomKuhnPokerPlayer
 from games.poker.simulator import KuhnPokerSimulator
+from games.tiktaktoe.players.human import HumanTikTakToePlayer
 from games.tiktaktoe.players.random import RandomTikTakToePlayer
 from games.tiktaktoe.simulator import TikTakToeSimulator
 
@@ -32,7 +33,7 @@ def main():
     run_simulation("TikTacToe",
                    TikTakToeSimulator(
                        RandomTikTakToePlayer("Jogador1"),
-                       RandomTikTakToePlayer("Jogador2"),
+                       HumanTikTakToePlayer("Tiago"),
                        3
                    ),
                    num_iterations

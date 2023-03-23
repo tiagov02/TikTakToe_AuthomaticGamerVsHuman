@@ -56,6 +56,7 @@ class TikTakToeState(State):
                     internal_result = self.__grid[row][col] == player
                     external_result = internal_result == external_result
 
+        '''
         # check upward diagonal
         for row in range(3, self.__dimension):
             for col in range(0, self.__dimension - 3):
@@ -75,6 +76,9 @@ class TikTakToeState(State):
                     return True
 
         return False
+        '''
+        return external_result
+
 
     def get_grid(self):
         return self.__grid
@@ -101,8 +105,7 @@ class TikTakToeState(State):
         y = action.get_y()
 
         # drop the checker
-        if self.__grid[x][y] == self.EMPTY_CELL:
-            self.__grid[x][y] = self.__acting_player
+        self.__grid[x][y] = self.__acting_player
 
         # determine if there is a winner
         self.__has_winner = self.__check_winner(self.__acting_player)

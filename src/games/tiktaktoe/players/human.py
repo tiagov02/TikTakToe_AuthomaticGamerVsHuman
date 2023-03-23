@@ -9,11 +9,12 @@ class HumanTikTakToePlayer(TikTakToePlayer):
         super().__init__(name)
 
     def get_action(self, state: TikTakToeState):
-        state.display()
         while True:
-            # noinspection PyBroadException
+            state.display()
+            line = input(f"Player {state.get_acting_player()}, choose a line: ")
+            column = input(f"AND A COLUMN: ")
             try:
-                return TikTakToeAction(int(input(f"Player {state.get_acting_player()}, choose a line: ")),int(input(f"AND A COLUMN: ")))
+                return TikTakToeAction(int(line),int(column))
             except Exception:
                 continue
 
