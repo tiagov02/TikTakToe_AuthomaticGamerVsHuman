@@ -11,7 +11,7 @@ class TikTakToeState(State):
     def __init__(self, dimension: int = 6):
         super().__init__()
 
-        if dimension < 4:
+        if dimension < 3:
             raise Exception("the number of rows must be 4 or over")
         """
         the dimensions of the board
@@ -39,23 +39,21 @@ class TikTakToeState(State):
         self.__has_winner = False
 
     def __check_winner(self, player):
+        internal_result = True
+        external_result = True
         # check for 4 across --> line
         for row in range(0, self.__dimension):
-            for col in range(0, self.__dimension - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row][col + 1] == player and \
-                        self.__grid[row][col + 2] == player and \
-                        self.__grid[row][col + 3] == player:
-                    return True
-
-        # check for 4 up and down
-        for row in range(0, self.__dimension - 3):
             for col in range(0, self.__dimension):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row + 1][col] == player and \
-                        self.__grid[row + 2][col] == player and \
-                        self.__grid[row + 3][col] == player:
-                    return True
+                internal_result = self.__grid[row][col] == player
+                external_result = internal_result == external_result
+
+
+        if not external_result:
+            # check for 4 up and down --> column
+            for col in range(0, self.__dimension):
+                for row in range(0, self.__dimension):
+                    internal_result = self.__grid[row][col] == player
+                    external_result = internal_result == external_result
 
         # check upward diagonal
         for row in range(3, self.__dimension):

@@ -16,12 +16,12 @@ class GreedyTikTakToePlayer(TikTakToePlayer):
         selected_col = None
         max_count = 0
 
-        for col in range(0, state.get_num_cols()):
+        for col in range(0, state.get_dimension()):
             if not state.validate_action(TikTakToeAction(col)):
                 continue
 
             count = 0
-            for row in range(0, state.get_num_rows()):
+            for row in range(0, state.get_dimension()):
                 if grid[row][col] == self.get_current_pos():
                     count += 1
 
