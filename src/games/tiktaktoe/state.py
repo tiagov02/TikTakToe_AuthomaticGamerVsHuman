@@ -108,7 +108,7 @@ class TikTakToeState(State):
         self.__grid[x][y] = self.__acting_player
 
         # determine if there is a winner
-        self.__has_winner = self.__check_winner(self.__acting_player)
+        #self.__has_winner = self.__check_winner(self.__acting_player)
 
         # switch to next player
         self.__acting_player = 1 if self.__acting_player == 0 else 0
@@ -153,7 +153,7 @@ class TikTakToeState(State):
         return self.__turns_count > (self.__dimension * self.__dimension)
 
     def is_finished(self) -> bool:
-        return self.__has_winner or self.__is_full()
+        return self.__is_full()
 
     def get_acting_player(self) -> int:
         return self.__acting_player
