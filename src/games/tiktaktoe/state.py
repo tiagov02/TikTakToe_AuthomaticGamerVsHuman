@@ -40,44 +40,40 @@ class TikTakToeState(State):
         self.__has_winner = False
 
     def __check_winner(self, player):
-        internal_result = True
-        external_result = True
-        # check for 4 across --> line
+        # check for 4 across
         for row in range(0, self.__dimension):
+            for col in range(0, self.__dimension - 2):
+                if self.__grid[row][col] == player and \
+                        self.__grid[row][col + 1] == player and \
+                        self.__grid[row][col + 2] == player:
+                    return True
+
+        # check for 4 up and down
+        for row in range(0, self.__dimension - 2):
             for col in range(0, self.__dimension):
-                internal_result = self.__grid[row][col] == player
-                external_result = internal_result == external_result
+                if self.__grid[row][col] == player and \
+                        self.__grid[row + 1][col] == player and \
+                        self.__grid[row + 2][col] == player:
+                    return True
 
-
-        if not external_result:
-            # check for 4 up and down --> column
-            for col in range(0, self.__dimension):
-                for row in range(0, self.__dimension):
-                    internal_result = self.__grid[row][col] == player
-                    external_result = internal_result == external_result
-
-        '''
         # check upward diagonal
-        for row in range(3, self.__dimension):
-            for col in range(0, self.__dimension - 3):
+        for row in range(2, self.__dimension):
+            for col in range(0, self.__dimension - 2):
                 if self.__grid[row][col] == player and \
                         self.__grid[row - 1][col + 1] == player and \
-                        self.__grid[row - 2][col + 2] == player and \
-                        self.__grid[row - 3][col + 3] == player:
+                        self.__grid[row - 2][col + 2] == player:
                     return True
 
         # check downward diagonal
-        for row in range(0, self.__dimension - 3):
-            for col in range(0, self.__dimension - 3):
+        for row in range(0, self.__dimension - 2):
+            for col in range(0, self.__dimension - 2):
                 if self.__grid[row][col] == player and \
+                        self.__grid[row][col] == player and \
                         self.__grid[row + 1][col + 1] == player and \
-                        self.__grid[row + 2][col + 2] == player and \
-                        self.__grid[row + 3][col + 3] == player:
+                        self.__grid[row + 2][col + 2] == player:
                     return True
 
         return False
-        '''
-        return external_result
 
 
     def get_grid(self):

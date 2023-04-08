@@ -5,7 +5,7 @@ from games.tiktaktoe.state import TikTakToeState
 from games.state import State
 
 
-class GreedyTikTakToePlayer(TikTakToePlayer):
+class OffensiveGreedyTikTakToePlayer(TikTakToePlayer):
 
     def __init__(self, name):
         super().__init__(name)

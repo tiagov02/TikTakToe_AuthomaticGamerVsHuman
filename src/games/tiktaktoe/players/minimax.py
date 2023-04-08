@@ -21,9 +21,9 @@ class MinimaxTikTakToePlayer(TikTakToePlayer):
         longest = 0
 
         # check each line
-        for row in range(0, state.get_num_rows()):
+        for row in range(0, state.get_dimension()):
             seq = 0
-            for col in range(0, state.get_num_cols()):
+            for col in range(0, state.get_dimension()):
                 if grid[row][col] == self.get_current_pos():
                     seq += 1
                 else:
@@ -35,9 +35,9 @@ class MinimaxTikTakToePlayer(TikTakToePlayer):
                 longest = seq
 
         # check each column
-        for col in range(0, state.get_num_cols()):
+        for col in range(0, state.get_dimension()):
             seq = 0
-            for row in range(0, state.get_num_rows()):
+            for row in range(0, state.get_dimension()):
                 if grid[row][col] == self.get_current_pos():
                     seq += 1
                 else:
@@ -49,8 +49,8 @@ class MinimaxTikTakToePlayer(TikTakToePlayer):
                 longest = seq
 
         # check each upward diagonal
-        for row in range(3, state.get_num_rows()):
-            for col in range(0, state.get_num_cols() - 3):
+        for row in range(3, state.get_dimension()):
+            for col in range(0, state.get_dimension() - 3):
                 seq1 = (1 if grid[row][col] == self.get_current_pos() else 0) + \
                        (1 if grid[row - 1][col + 1] == self.get_current_pos() else 0) + \
                        (1 if grid[row - 2][col + 2] == self.get_current_pos() else 0)
@@ -66,8 +66,8 @@ class MinimaxTikTakToePlayer(TikTakToePlayer):
                     longest = seq2
 
         # check each downward diagonal
-        for row in range(0, state.get_num_rows() - 3):
-            for col in range(0, state.get_num_cols() - 3):
+        for row in range(0, state.get_dimension() - 3):
+            for col in range(0, state.get_dimension() - 3):
                 seq1 = (1 if grid[row][col] == self.get_current_pos() else 0) + \
                        (1 if grid[row + 1][col + 1] == self.get_current_pos() else 0) + \
                        (1 if grid[row + 2][col + 2] == self.get_current_pos() else 0)
