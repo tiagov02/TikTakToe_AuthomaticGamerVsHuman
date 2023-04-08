@@ -1,44 +1,34 @@
-from random import choice
-from games.tiktaktoe.action import TikTakToeAction
-from games.tiktaktoe.player import TikTakToePlayer
-from games.tiktaktoe.state import TikTakToeState
-from games.state import State
+from src.games.tiktaktoe.action import TikTakToeAction
+from src.games.tiktaktoe.players.offensive_greedy import GreedyTikTakToePlayer
 
 
-class DesfensiveGreedyTikTakToePlayer(TikTakToePlayer):
-
-    def __init__(self, name):
-        super().__init__(name)
-
-    def get_action(self, state: TikTakToeState):
+class DefensiveGreedyPlayer(GreedyTikTakToePlayer):
+    @classmethod
+    def get_score_for_position(cls, state, position: TikTakToeAction):
+        number_of_chips = 0
         grid = state.get_grid()
 
-        selected_col = None
-        max_count = 0
+        # verificar linha
+        for idx_row in range(state.get_num_rows()):
+            if grid[idx_row][position.get_y()] != state.get_acting_player():
+                number_of_chips += 1
 
-        for col in range(0, state.get_dimension()):
-            if not state.validate_action(TikTakToeAction(col)):
-                continue
+        # verificar coluna
+        for idx_col in range(state.get_num_cols()):
+            if grid[position.get_y()][idx_col] != state.get_acting_player():
+                number_of_chips += 1
 
-            count = 0
-            for row in range(0, state.get_dimension()):
-                if grid[row][col] == self.get_current_pos():
-                    count += 1
+        # verificar diagonais
 
-            # it swap the column if we exceed the count. if the count of chips is the same, we swap 50% of the times
-            if selected_col is None or count > max_count or (count == max_count and choice([False, True])):
-                selected_col = col
-                max_count = count
+        #  o ponto a verificar é uma diagonal
+        if (position.get_x(), position.get_y(),) in cls.CORNERS:
+            # verificar diagonal crescente (0,0) (1,1) (2,2)
+            for idx_row, idx_col in zip(range(state.get_num_rows()), range(state.get_num_cols())):
+                if grid[idx_row][idx_col] != state.get_acting_player():
+                    number_of_chips += 1
 
-        if selected_col is None:
-            raise Exception("There is no valid action")
-
-        return TikTakToeAction(selected_col)
-
-    def event_action(self, pos: int, action, new_state: State):
-        # ignore
-        pass
-
-    def event_end_game(self, final_state: State):
-        # ignore
-        pass
+            # verificar diagonal decrescente (0, 2) (1, 1) (2, 0)
+            for idx_row, idx_col in zip(range(state.get_num_rows()), range(state.get_num_cols() - 1, -1, -1)):
+                if grid[idx_row][idx_col] != state.get_acting_player():
+                    number_of_chips += 1
+        return number_of_chips
